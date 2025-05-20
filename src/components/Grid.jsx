@@ -12,25 +12,23 @@ export default function Grid({ score, setScore }) {
     getData();
   }, []);
 
-  const handleClick = (e) => {
-    const id = e.target.closest(".card").dataset.id;
-
-    setPokemonData((p) => shuffle(p));
+  const handleClick = (id) => {
+    setPokemonData((prev) => shuffle(prev));
 
     if (!clickedCards[id]) {
-      setClickedCards((c) => ({ ...c, [id]: 1 }));
-      setScore((s) => ({ ...s, current: s.current + 1 }));
+      setClickedCards((prev) => ({ ...prev, [id]: 1 }));
+      setScore((prev) => ({ ...prev, current: prev.current + 1 }));
       return;
     }
 
     setClickedCards({});
 
     if (score.current > score.best) {
-      setScore((s) => ({ best: s.current, current: 0 }));
+      setScore((prev) => ({ best: prev.current, current: 0 }));
       return;
     }
 
-    setScore((s) => ({ ...s, current: 0 }));
+    setScore((prev) => ({ ...prev, current: 0 }));
   };
 
   return (
@@ -38,10 +36,9 @@ export default function Grid({ score, setScore }) {
       {pokemonData.map((item) => (
         <Card
           key={item.id}
-          id={item.id}
           name={item.name}
           source={item.sprite}
-          onClick={handleClick}
+          onClick={() => handleClick(item.id)}
         />
       ))}
     </article>
